@@ -4,7 +4,15 @@ const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const userAPI = require("./API/userAPI")();
 const noteAPI = require("./API/noteAPI")();
+const rateLimit = require('express-rate-limit');
 
+const limiter = rateLimit({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // limit each IP to 100 requests per windowMs
+    message: 'Too many requests from this IP, please try again later.',
+  });
+  
+app.use(limiter);
 require("dotenv").config();
 
 const dbConnection = require("./DBConnection/db");
